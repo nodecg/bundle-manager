@@ -45,7 +45,8 @@ module.exports = function(rootPath, nodecgVersion, nodecgConfig, Logger) {
     ], {
         ignored: /[\/\\]\./,
         persistent: true,
-        ignoreInitial: true
+        ignoreInitial: true,
+        followSymlinks: true
     });
 
     /* istanbul ignore next */
