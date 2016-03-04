@@ -28,7 +28,7 @@ module.exports = function(rootPath, nodecgVersion, nodecgConfig, Logger) {
     var emitter = new EventEmitter();
     var bundlesPath = path.join(rootPath, '/bundles');
     var installNpmDeps = require('./lib/npm_installer')(nodecgConfig, Logger);
-    var installBowerDeps = require('./lib/bower_installer')(Logger);
+    var installBowerDeps = require('./lib/bower_installer')(nodecgConfig, Logger);
 
     // Create the "bundles" dir if it does not exist.
     /* istanbul ignore if: We know this code works and testing it is tedious, so we don't bother to test it. */
@@ -126,7 +126,7 @@ module.exports = function(rootPath, nodecgVersion, nodecgConfig, Logger) {
 
         _bundles.push(bundle);
 
-        if (bundle.dependencies) {
+        if (bundle.dependencies && nodecgConfig.hasOwnProperty('autodeps') ? nodecgConfig.autodeps.npm : true) {
             installNpmDeps(bundle);
         }
 
