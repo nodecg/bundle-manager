@@ -16,7 +16,7 @@ before(function (done) {
 		fs.mkdirSync('_workingTest');
 	}
 
-	wrench.copyDirSyncRecursive('test/specimen_files', '_workingTest', {forceDelete: true});
+	wrench.copyDirSyncRecursive('test/fixtures', '_workingTest', {forceDelete: true});
 
 	this.bundleManager = require('../index.js')('_workingTest', '0.7.0', {}, Logger);
 	this.bundleManager.on('allLoaded', function () {
