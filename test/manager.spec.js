@@ -10,7 +10,7 @@ var assert = chai.assert;
 var Logger = require('@nodecg/logger')({console: {enabled: true}});
 
 before(function (done) {
-	this.timeout(15000);
+	this.timeout(30000);
 
 	if (!fs.existsSync('_workingTest')) {
 		fs.mkdirSync('_workingTest');
