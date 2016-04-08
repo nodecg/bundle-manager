@@ -1,3 +1,18 @@
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/nodecg/bundle-manager/compare/v0.3.0...v0.4.0) (2016-04-08)
+
+
+### Chores
+
+* **package:** update nodecg-bundle-parser ([117e487](https://github.com/nodecg/bundle-manager/commit/117e487))
+
+
+### BREAKING CHANGES
+
+* package: uploads have been renamed to assets
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/nodecg/bundle-manager/compare/v0.2.1...v0.3.0) (2016-04-07)
 
