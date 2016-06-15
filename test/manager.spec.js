@@ -91,7 +91,10 @@ describe('watcher', function () {
 
 		this.bundleManager.once('bundleChanged', function (bundle) {
 			expect(bundle.name).to.equal('change-config');
-			expect(bundle.config).to.deep.equal({bundleConfig: true, _changed: true});
+			expect(bundle.config).to.deep.equal({
+				bundleConfig: true,
+				_changed: true
+			});
 			done();
 		});
 
@@ -140,7 +143,9 @@ describe('per-bundle bower dependencies', function () {
 
 after(function (done) {
 	this.bundleManager.stopWatching();
-	rimraf('_workingTest', function () {
-		done();
+	process.nextTick(() => {
+		rimraf('_workingTest', function () {
+			done();
+		});
 	});
 });

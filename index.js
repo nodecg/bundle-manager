@@ -124,7 +124,7 @@ module.exports = function (rootPath, nodecgVersion, nodecgConfig, Logger) {
 
 		_bundles.push(bundle);
 
-		if (bundle.dependencies && nodecgConfig.hasOwnProperty('autodeps') ? nodecgConfig.autodeps.npm : true) {
+		if (bundle.dependencies && {}.hasOwnProperty.call(nodecgConfig, 'autodeps') ? nodecgConfig.autodeps.npm : true) {
 			installNpmDeps(bundle);
 		}
 
@@ -199,7 +199,7 @@ module.exports = function (rootPath, nodecgVersion, nodecgConfig, Logger) {
 			_backoffTimer = null;
 			for (var bundleName in _hasChanged) {
 				/* istanbul ignore if: Standard hasOwnProperty check, doesn't need to be tested */
-				if (!_hasChanged.hasOwnProperty(bundleName)) {
+				if (!{}.hasOwnProperty.call(_hasChanged, bundleName)) {
 					continue;
 				}
 
