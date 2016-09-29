@@ -312,7 +312,7 @@ module.exports = function (rootPath, nodecgVersion, nodecgConfig, Logger) {
 	/**
 	 * Watches the bundles folder for changes.
 	 */
-	emitter.startWatching = function startWatching() {
+	emitter.startWatching = function () {
 		/* istanbul ignore if: We know this works. */
 		if (_listeningToWatcher) {
 			return;
