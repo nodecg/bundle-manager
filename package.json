@@ -33,7 +33,7 @@
     "@nodecg/logger": "^0.1.0",
     "chai": "^3.4.1",
     "coveralls": "^2.11.6",
-    "eslint": "^3.8.1",
+    "eslint": "^3.9.1",
     "eslint-config-xo": "^0.17.0",
     "istanbul": "^0.4.1",
     "mocha": "^3.0.0",

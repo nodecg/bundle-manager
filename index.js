@@ -15,7 +15,7 @@ const watcher = chokidar.watch([
 	'!**/node_modules/**',    // Ignore node_modules folders
 	'!**/bower_components/**' // Ignore bower_components folders
 ], {
-	ignored: /[\/\\]\./,
+	ignored: /[/\\]\./,
 	persistent: true,
 	ignoreInitial: true,
 	followSymlinks: true
