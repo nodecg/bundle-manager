@@ -106,7 +106,8 @@ module.exports.init = function (rootPath, nodecgVersion, nodecgConfig, Logger) {
 	});
 
 	// Do an initial load of each bundle in the "bundles" folder.
-	// During runtime, any changes to a bundle's "dashboard" folder will trigger a re-load of that bundle.
+	// During runtime, any changes to a bundle's "dashboard" folder will trigger a re-load of that bundle,
+	// as will changes to its `package.json`.
 	const bowerPromises = [];
 	fs.readdirSync(bundlesPath).forEach(bundleFolderName => {
 		const bundlePath = path.join(bundlesPath, bundleFolderName);
