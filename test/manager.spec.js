@@ -18,8 +18,16 @@ before(function (done) {
 
 	wrench.copyDirSyncRecursive('test/fixtures', '_workingTest', {forceDelete: true});
 
+	const nodecgConfig = {
+		bundles: {
+			disabled: [
+				'test-disabled-bundle'
+			]
+		}
+	};
+
 	this.bundleManager = require('../index.js');
-	this.bundleManager.init('_workingTest', '0.7.0', {}, Logger).then(() => {
+	this.bundleManager.init('_workingTest', '0.7.0', nodecgConfig, Logger).then(() => {
 		// Needs a little extra wait time for some reason.
 		// Without this, tests randomly fail.
 		setTimeout(() => {
@@ -36,6 +44,11 @@ describe('loader', () => {
 
 	it('should not load bundles with a non-satisfactory nodecg.compatibleRange', function () {
 		const bundle = this.bundleManager.find('incompatible-range');
+		assert.isUndefined(bundle);
+	});
+
+	it('should not load a bundle that has been disabled', function () {
+		const bundle = this.bundleManager.find('test-disabled-bundle');
 		assert.isUndefined(bundle);
 	});
 });

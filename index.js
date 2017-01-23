@@ -114,6 +114,11 @@ module.exports.init = function (rootPath, nodecgVersion, nodecgConfig, Logger) {
 			return;
 		}
 
+		if (nodecgConfig && nodecgConfig.bundles && nodecgConfig.bundles.disabled.indexOf(bundleFolderName) > -1) {
+			log.debug('Not loading bundle ' + bundleFolderName + ' as it is disabled in config');
+			return;
+		}
+
 		// Parse each bundle and push the result onto the _bundles array
 		let bundle;
 		const bundleCfgPath = path.join(rootPath, '/cfg/', bundleFolderName + '.json');
