@@ -1,3 +1,13 @@
+<a name="0.5.1"></a>
+## [0.5.1](https://github.com/nodecg/bundle-manager/compare/v0.5.0...v0.5.1) (2017-01-23)
+
+
+### Features
+
+* add ability to disable bundles ([#19](https://github.com/nodecg/bundle-manager/issues/19)) ([0e193d5](https://github.com/nodecg/bundle-manager/commit/0e193d5))
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/nodecg/bundle-manager/compare/v0.4.0...v0.5.0) (2016-10-20)
 
