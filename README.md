@@ -1,4 +1,6 @@
 # @nodecg/bundle-manager
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/nodecg/bundle-manager.svg)](https://greenkeeper.io/)
 NodeCG's internal runtime memory store of bundles
 
 [![Build Status](https://travis-ci.org/nodecg/bundle-manager.svg?branch=master)](https://travis-ci.org/nodecg/bundle-manager)
