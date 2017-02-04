@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/nodecg/bundle-manager#readme",
   "devDependencies": {
-    "@nodecg/logger": "^0.1.0",
+    "@nodecg/logger": "^0.2.0",
     "chai": "^3.4.1",
     "coveralls": "^2.11.6",
     "eslint": "^3.9.1",
@@ -51,5 +51,8 @@
     "npm-path": "^2.0.2",
     "q": "^1.4.1",
     "semver": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=6.0.0"
   }
 }
