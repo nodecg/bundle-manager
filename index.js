@@ -115,12 +115,14 @@ module.exports.init = function (rootPath, nodecgVersion, nodecgConfig, Logger) {
 			return;
 		}
 
-		if (nodecgConfig && nodecgConfig.bundles && nodecgConfig.bundles.disabled.indexOf(bundleFolderName) > -1) {
+		if (nodecgConfig && nodecgConfig.bundles && nodecgConfig.bundles.disabled &&
+			nodecgConfig.bundles.disabled.indexOf(bundleFolderName) > -1) {
 			log.debug('Not loading bundle ' + bundleFolderName + ' as it is disabled in config');
 			return;
 		}
 
-		if (nodecgConfig && nodecgConfig.bundles && nodecgConfig.bundles.enabled.indexOf(bundleFolderName) < 0) {
+		if (nodecgConfig && nodecgConfig.bundles && nodecgConfig.bundles.enabled &&
+			nodecgConfig.bundles.enabled.indexOf(bundleFolderName) < 0) {
 			log.debug('Not loading bundle ' + bundleFolderName + ' as it is not enabled in config');
 			return;
 		}
