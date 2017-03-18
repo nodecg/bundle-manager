@@ -162,19 +162,17 @@ module.exports.init = function (rootPath, nodecgVersion, nodecgConfig, Logger) {
 	});
 
 	// Once all the bowerPromises have been resolved, start up the bundle watcher and emit "allLoaded"
-	return Promise.all(bowerPromises)
-		.then(() => {
-			watcher.add([
-				bundlesPath + '/**/dashboard/**', // Watch dashboard folders
-				bundlesPath + '/**/package.json'  // Watch bundle package.json files
-			]);
-		})
-		.catch(
-			/* istanbul ignore next */
-			err => {
-				log.error(err.stack);
-			}
-		);
+	return Promise.all(bowerPromises).then(() => {
+		watcher.add([
+			bundlesPath + '/**/dashboard/**', // Watch dashboard folders
+			bundlesPath + '/**/package.json'  // Watch bundle package.json files
+		]);
+	}).catch(
+		/* istanbul ignore next */
+		err => {
+			log.error(err.stack);
+		}
+	);
 };
 
 /**
@@ -209,7 +207,7 @@ module.exports.add = function (bundle) {
 		return;
 	}
 
-	// remove any existing bundles with this name
+	// Remove any existing bundles with this name
 	if (module.exports.find(bundle.name)) {
 		module.exports.remove(bundle.name);
 	}
