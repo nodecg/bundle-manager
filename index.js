@@ -253,7 +253,7 @@ module.exports._stopWatching = function () {
 function handleChange(bundleName) {
 	const bundle = module.exports.find(bundleName);
 
-	/* istanbul ignore if: I don't think it's possible for "bundle" to be undefined here, but just in case... */
+	/* istanbul ignore if: It's rare for `bundle` to be undefined here, but it can happen when using black/whitelisting. */
 	if (!bundle) {
 		return;
 	}
