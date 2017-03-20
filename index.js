@@ -1,12 +1,15 @@
 'use strict';
 
-const path = require('path');
+// Native
 const EventEmitter = require('events').EventEmitter;
 const fs = require('fs.extra');
-const Promise = require('bluebird');
-const semver = require('semver');
+const path = require('path');
+
+// Packages
 const chokidar = require('chokidar');
 const parseBundle = require('nodecg-bundle-parser');
+const Promise = require('bluebird');
+const semver = require('semver');
 
 // Start up the watcher, but don't watch any files yet.
 // We'll add the files we want to watch later, in the startWatching() method.
@@ -23,12 +26,12 @@ const watcher = chokidar.watch([
 
 const emitter = new EventEmitter();
 const _bundles = [];
+let bundlesPath;
 let log;
 let _rootPath;
 let _backoffTimer = null;
 let _hasChanged = {};
 let _initialized = false;
-let bundlesPath;
 
 module.exports = emitter;
 
