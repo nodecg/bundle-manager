@@ -1,3 +1,13 @@
+<a name="0.5.4"></a>
+## [0.5.4](https://github.com/nodecg/bundle-manager/compare/v0.5.3...v0.5.4) (2017-03-20)
+
+
+### Features
+
+* add support for workspaces ([cb08052](https://github.com/nodecg/bundle-manager/commit/cb08052))
+
+
+
 <a name="0.5.3"></a>
 ## [0.5.3](https://github.com/nodecg/bundle-manager/compare/v0.5.2...v0.5.3) (2017-03-15)
 
