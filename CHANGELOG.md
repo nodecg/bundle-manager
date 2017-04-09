@@ -1,3 +1,12 @@
+<a name="0.5.5"></a>
+## [0.5.5](https://github.com/nodecg/bundle-manager/compare/v0.5.4...v0.5.5) (2017-04-09)
+
+### Features
+
+* add support for fullbleed panels ([5ba9c44](https://github.com/nodecg/bundle-manager/commit/5ba9c44))
+
+
+
 <a name="0.5.4"></a>
 ## [0.5.4](https://github.com/nodecg/bundle-manager/compare/v0.5.3...v0.5.4) (2017-03-20)
 

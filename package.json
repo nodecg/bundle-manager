@@ -1,6 +1,6 @@
 {
   "name": "@nodecg/bundle-manager",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "NodeCG's internal runtime memory store of bundles",
   "main": "index.js",
   "files": [
