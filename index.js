@@ -25,13 +25,13 @@ const watcher = chokidar.watch([
 });
 
 const emitter = new EventEmitter();
-const _bundles = [];
+const bundles = [];
 let bundlesPath;
 let log;
-let _rootPath;
-let _backoffTimer = null;
-let _hasChanged = {};
-let _initialized = false;
+let root;
+let backoffTimer = null;
+let hasChanged = {};
+let initialized = false;
 
 module.exports = emitter;
 
@@ -44,13 +44,13 @@ module.exports = emitter;
  * @return {Object} - A bundle-manager instance.
  */
 module.exports.init = function (rootPath, nodecgVersion, nodecgConfig, Logger) {
-	if (_initialized) {
+	if (initialized) {
 		throw new Error('Cannot initialize when already initialized');
 	}
 
-	_initialized = true;
+	initialized = true;
 
-	_rootPath = rootPath;
+	root = rootPath;
 	log = new Logger('nodecg/lib/bundles');
 	log.trace('Loading bundles');
 
@@ -66,35 +66,35 @@ module.exports.init = function (rootPath, nodecgVersion, nodecgConfig, Logger) {
 
 	/* istanbul ignore next */
 	watcher.on('add', filePath => {
-		const bundleName = _extractBundleName(filePath);
+		const bundleName = extractBundleName(filePath);
 
 		// In theory, the bundle parser would have thrown an error long before this block would execute,
 		// because in order for us to be adding a panel HTML file, that means that the file would have been missing,
 		// which the parser does not allow and would throw an error for.
 		// Just in case though, its here.
-		if (_isPanelHTMLFile(bundleName, filePath)) {
+		if (isPanelHTMLFile(bundleName, filePath)) {
 			handleChange(bundleName);
 		}
 	});
 
 	watcher.on('change', filePath => {
-		const bundleName = _extractBundleName(filePath);
+		const bundleName = extractBundleName(filePath);
 
-		if (_isManifest(bundleName, filePath)) {
+		if (isManifest(bundleName, filePath)) {
 			handleChange(bundleName);
-		} else if (_isPanelHTMLFile(bundleName, filePath)) {
+		} else if (isPanelHTMLFile(bundleName, filePath)) {
 			handleChange(bundleName);
 		}
 	});
 
 	watcher.on('unlink', filePath => {
-		const bundleName = _extractBundleName(filePath);
+		const bundleName = extractBundleName(filePath);
 
-		if (_isPanelHTMLFile(bundleName, filePath)) {
+		if (isPanelHTMLFile(bundleName, filePath)) {
 			// This will cause NodeCG to crash, because the parser will throw an error due to
 			// a panel's HTML file no longer being present.
 			handleChange(bundleName);
-		} else if (_isManifest(bundleName, filePath)) {
+		} else if (isManifest(bundleName, filePath)) {
 			log.debug('Processing removed event for', bundleName);
 			log.info('%s\'s package.json can no longer be found on disk, ' +
 				'assuming the bundle has been deleted or moved', bundleName);
@@ -130,7 +130,7 @@ module.exports.init = function (rootPath, nodecgVersion, nodecgConfig, Logger) {
 			return;
 		}
 
-		// Parse each bundle and push the result onto the _bundles array
+		// Parse each bundle and push the result onto the bundles array
 		let bundle;
 		const bundleCfgPath = path.join(rootPath, '/cfg/', bundleFolderName + '.json');
 		if (fs.existsSync(bundleCfgPath)) {
@@ -154,7 +154,7 @@ module.exports.init = function (rootPath, nodecgVersion, nodecgConfig, Logger) {
 			return;
 		}
 
-		_bundles.push(bundle);
+		bundles.push(bundle);
 
 		if (bundle.dependencies && {}.hasOwnProperty.call(nodecgConfig, 'autodeps') ? nodecgConfig.autodeps.npm : true) {
 			installNpmDeps(bundle);
@@ -183,7 +183,7 @@ module.exports.init = function (rootPath, nodecgVersion, nodecgConfig, Logger) {
  * @returns {Array.<Object>}
  */
 module.exports.all = function () {
-	return _bundles.slice(0);
+	return bundles.slice(0);
 };
 
 /**
@@ -192,10 +192,10 @@ module.exports.all = function () {
  * @returns {Object|undefined}
  */
 module.exports.find = function (name) {
-	const len = _bundles.length;
+	const len = bundles.length;
 	for (let i = 0; i < len; i++) {
-		if (_bundles[i].name === name) {
-			return _bundles[i];
+		if (bundles[i].name === name) {
+			return bundles[i];
 		}
 	}
 };
@@ -215,7 +215,7 @@ module.exports.add = function (bundle) {
 		module.exports.remove(bundle.name);
 	}
 
-	_bundles.push(bundle);
+	bundles.push(bundle);
 };
 
 /**
@@ -223,15 +223,15 @@ module.exports.add = function (bundle) {
  * @param bundleName {String}
  */
 module.exports.remove = function (bundleName) {
-	const len = _bundles.length;
+	const len = bundles.length;
 	for (let i = 0; i < len; i++) {
 		// TODO: this check shouldn't have to happen, idk why things in this array can sometimes be undefined
-		if (!_bundles[i]) {
+		if (!bundles[i]) {
 			continue;
 		}
 
-		if (_bundles[i].name === bundleName) {
-			_bundles.splice(i, 1);
+		if (bundles[i].name === bundleName) {
+			bundles.splice(i, 1);
 		}
 	}
 };
@@ -258,16 +258,16 @@ function handleChange(bundleName) {
 		return;
 	}
 
-	if (_backoffTimer) {
+	if (backoffTimer) {
 		log.debug('Backoff active, delaying processing of change detected in', bundleName);
-		_hasChanged[bundleName] = true;
+		hasChanged[bundleName] = true;
 		resetBackoffTimer();
 	} else {
 		log.debug('Processing change event for', bundleName);
 		resetBackoffTimer();
 
 		let reparsedBundle;
-		const bundleCfgPath = path.join(_rootPath, '/cfg/', bundleName + '.json');
+		const bundleCfgPath = path.join(root, '/cfg/', bundleName + '.json');
 		if (fs.existsSync(bundleCfgPath)) {
 			reparsedBundle = parseBundle(bundle.dir, bundleCfgPath);
 		} else {
@@ -283,19 +283,19 @@ function handleChange(bundleName) {
  * Resets the backoff timer used to avoid event thrashing when many files change rapidly.
  */
 function resetBackoffTimer() {
-	clearTimeout(_backoffTimer);
-	_backoffTimer = setTimeout(() => {
-		_backoffTimer = null;
-		for (const bundleName in _hasChanged) {
+	clearTimeout(backoffTimer);
+	backoffTimer = setTimeout(() => {
+		backoffTimer = null;
+		for (const bundleName in hasChanged) {
 			/* istanbul ignore if: Standard hasOwnProperty check, doesn't need to be tested */
-			if (!{}.hasOwnProperty.call(_hasChanged, bundleName)) {
+			if (!{}.hasOwnProperty.call(hasChanged, bundleName)) {
 				continue;
 			}
 
 			log.debug('Backoff finished, emitting change event for', bundleName);
 			handleChange(bundleName);
 		}
-		_hasChanged = {};
+		hasChanged = {};
 	}, 500);
 }
 
@@ -305,7 +305,7 @@ function resetBackoffTimer() {
  * @returns {String} - The name of the bundle that owns this path.
  * @private
  */
-function _extractBundleName(filePath) {
+function extractBundleName(filePath) {
 	const parts = filePath.replace(bundlesPath, '').split(path.sep);
 	return parts[1];
 }
@@ -317,7 +317,7 @@ function _extractBundleName(filePath) {
  * @returns {Boolean}
  * @private
  */
-function _isPanelHTMLFile(bundleName, filePath) {
+function isPanelHTMLFile(bundleName, filePath) {
 	const bundle = module.exports.find(bundleName);
 	if (bundle) {
 		return bundle.dashboard.panels.some(panel => {
@@ -335,6 +335,6 @@ function _isPanelHTMLFile(bundleName, filePath) {
  * @returns {Boolean}
  * @private
  */
-function _isManifest(bundleName, filePath) {
+function isManifest(bundleName, filePath) {
 	return path.dirname(filePath).endsWith(bundleName) && path.basename(filePath) === 'package.json';
 }
