@@ -14,8 +14,8 @@ const semver = require('semver');
 // Start up the watcher, but don't watch any files yet.
 // We'll add the files we want to watch later, in the startWatching() method.
 const watcher = chokidar.watch([
-	'!**/*___jb_*___',        // Ignore temp files created by JetBrains IDEs
-	'!**/node_modules/**',    // Ignore node_modules folders
+	'!**/*___jb_*___', // Ignore temp files created by JetBrains IDEs
+	'!**/node_modules/**', // Ignore node_modules folders
 	'!**/bower_components/**' // Ignore bower_components folders
 ], {
 	ignored: /[/\\]\./,
@@ -168,7 +168,7 @@ module.exports.init = function (rootPath, nodecgVersion, nodecgConfig, Logger) {
 	return Promise.all(bowerPromises).then(() => {
 		watcher.add([
 			bundlesPath + '/**/dashboard/**', // Watch dashboard folders
-			bundlesPath + '/**/package.json'  // Watch bundle package.json files
+			bundlesPath + '/**/package.json' // Watch bundle package.json files
 		]);
 	}).catch(
 		/* istanbul ignore next */
@@ -242,7 +242,7 @@ module.exports.remove = function (bundleName) {
 module.exports._stopWatching = function () {
 	watcher.unwatch([
 		bundlesPath + '/**/dashboard/**', // Unwatch dashboard folders
-		bundlesPath + '/**/package.json'  // Unwatch bundle package.json files
+		bundlesPath + '/**/package.json' // Unwatch bundle package.json files
 	]);
 };
 
