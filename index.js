@@ -12,7 +12,7 @@ const Promise = require('bluebird');
 const semver = require('semver');
 
 // Start up the watcher, but don't watch any files yet.
-// We'll add the files we want to watch later, in the startWatching() method.
+// We'll add the files we want to watch later, in the init() method.
 const watcher = chokidar.watch([
 	'!**/*___jb_*___', // Ignore temp files created by JetBrains IDEs
 	'!**/node_modules/**', // Ignore node_modules folders
@@ -166,10 +166,17 @@ module.exports.init = function (rootPath, nodecgVersion, nodecgConfig, Logger) {
 
 	// Once all the bowerPromises have been resolved, start up the bundle watcher and emit "allLoaded"
 	return Promise.all(bowerPromises).then(() => {
-		watcher.add([
-			bundlesPath + '/**/dashboard/**', // Watch dashboard folders
-			bundlesPath + '/**/package.json' // Watch bundle package.json files
-		]);
+		// Workaround for https://github.com/paulmillr/chokidar/issues/419
+		// This workaround is necessary to fully support symlinks.
+		fs.readdirSync(bundlesPath)
+			.map(name => path.join(bundlesPath, name))
+			.filter(source => fs.statSync(source).isDirectory())
+			.forEach(bundlePath => {
+				watcher.add([
+					path.join(bundlePath, 'dashboard'), // Watch dashboard folders
+					path.join(bundlePath, '/package.json') // Watch bundle package.json files
+				]);
+			});
 	}).catch(
 		/* istanbul ignore next */
 		err => {
@@ -240,10 +247,7 @@ module.exports.remove = function (bundleName) {
  * Only used by tests.
  */
 module.exports._stopWatching = function () {
-	watcher.unwatch([
-		bundlesPath + '/**/dashboard/**', // Unwatch dashboard folders
-		bundlesPath + '/**/package.json' // Unwatch bundle package.json files
-	]);
+	watcher.close();
 };
 
 /**

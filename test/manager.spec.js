@@ -17,6 +17,10 @@ before(function (done) {
 	}
 
 	wrench.copyDirSyncRecursive('test/fixtures', '_workingTest', {forceDelete: true});
+	fs.symlinkSync(
+		path.resolve('_workingTest/change-panel-symlink-target'),
+		path.resolve('_workingTest/bundles/change-panel-symlink')
+	);
 
 	const nodecgConfig = {
 		bundles: {
@@ -93,6 +97,18 @@ describe('watcher', () => {
 		});
 
 		const panelPath = '_workingTest/bundles/change-panel/dashboard/panel.html';
+		let panel = fs.readFileSync(panelPath);
+		panel += '\n';
+		fs.writeFileSync(panelPath, panel);
+	});
+
+	it('should detect panel HTML file changes when the bundle is symlinked', function (done) {
+		this.bundleManager.once('bundleChanged', bundle => {
+			expect(bundle.name).to.equal('change-panel-symlink');
+			done();
+		});
+
+		const panelPath = '_workingTest/bundles/change-panel-symlink/dashboard/panel.html';
 		let panel = fs.readFileSync(panelPath);
 		panel += '\n';
 		fs.writeFileSync(panelPath, panel);
