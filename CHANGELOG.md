@@ -1,3 +1,13 @@
+<a name="0.5.6"></a>
+## [0.5.6](https://github.com/nodecg/bundle-manager/compare/v0.5.5...v0.5.6) (2017-08-22)
+
+
+### Bug Fixes
+
+* fix panel changes in symlinked bundle folders not being picked up ([06ffb71](https://github.com/nodecg/bundle-manager/commit/06ffb71))
+
+
+
 <a name="0.5.5"></a>
 ## [0.5.5](https://github.com/nodecg/bundle-manager/compare/v0.5.4...v0.5.5) (2017-04-09)
 
